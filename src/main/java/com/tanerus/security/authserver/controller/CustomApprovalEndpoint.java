@@ -122,7 +122,7 @@ public class CustomApprovalEndpoint {
         String clientId = authorizationRequest.getClientId();
 
         StringBuilder builder = new StringBuilder();
-        builder.append("<html><body><h1>OAuth Approval - DHB</h1>");
+        builder.append("<html><body><h1>OAuth Approval - XXX</h1>");
         builder.append("<p>Do you authorize \"").append(HtmlUtils.htmlEscape(clientId));
         builder.append("\" to access your protected resources?</p>");
         builder.append("<form id=\"confirmationForm\" name=\"confirmationForm\" action=\"");
