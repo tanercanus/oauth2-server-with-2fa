@@ -22,7 +22,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
 
     @Autowired
     private AuthenticationManager authenticationManager;
-    
+
     @Autowired
     private ClientDetailsService clientDetailsService;
 
@@ -52,14 +52,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 .secret(hashedSecret)
                 //.secret(passwordEncoder (). encode ("secret"))
                 .authorizedGrantTypes(/*"password",*/"authorization_code"/*,"refresh_token"*/)
-                .scopes("user_info","read","write")
+                .scopes("user_info", "read", "write")
                 .authorities(TwoFactorAuthenticationFilter.ROLE_TWO_FACTOR_AUTHENTICATION_ENABLED)
                 .accessTokenValiditySeconds(20)
                 .refreshTokenValiditySeconds(20)
                 //.refreshTokenValiditySeconds(600)
                 //.autoApprove(true) --> scope vb seyleri otomatik kabul ediyor.
 
-        .redirectUris("http://localhost:8082/ui/login", "http://localhost:8082/ui/secure", "http://localhost:8081/auth/principal","/");
+                .redirectUris("http://localhost:8082/ui/login", "http://localhost:8082/ui/secure", "http://localhost:8081/auth/principal", "/");
     }
 
 
@@ -67,28 +67,28 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
         endpoints
-        	.authenticationManager(authenticationManager)
-        	.requestFactory(customOAuth2RequestFactory());
+                .authenticationManager(authenticationManager)
+                .requestFactory(customOAuth2RequestFactory());
     }
-    
-     
+
+
     @Bean
-    public DefaultOAuth2RequestFactory customOAuth2RequestFactory(){
-    	return new CustomOAuth2RequestFactory(clientDetailsService);
+    public DefaultOAuth2RequestFactory customOAuth2RequestFactory() {
+        return new CustomOAuth2RequestFactory(clientDetailsService);
     }
-    
+
     @Bean
-    public FilterRegistrationBean twoFactorAuthenticationFilterRegistration(){
-    	FilterRegistrationBean registration = new FilterRegistrationBean();
-    	registration.setFilter(twoFactorAuthenticationFilter());
-    	registration.addUrlPatterns("/oauth/authorize");
-    	registration.setName("twoFactorAuthenticationFilter");
-    	return registration;
+    public FilterRegistrationBean twoFactorAuthenticationFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(twoFactorAuthenticationFilter());
+        registration.addUrlPatterns("/oauth/authorize");
+        registration.setName("twoFactorAuthenticationFilter");
+        return registration;
     }
-    
-	@Bean
-    public TwoFactorAuthenticationFilter twoFactorAuthenticationFilter(){
-    	return new TwoFactorAuthenticationFilter();
+
+    @Bean
+    public TwoFactorAuthenticationFilter twoFactorAuthenticationFilter() {
+        return new TwoFactorAuthenticationFilter();
     }
 
     @PostConstruct

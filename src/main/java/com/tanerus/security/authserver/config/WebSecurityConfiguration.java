@@ -22,11 +22,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 @Order(-10)
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
-	@Autowired
-	CustomDetailsService customDetailsService;
+    @Autowired
+    CustomDetailsService customDetailsService;
 
-	@Autowired
-	private UserAuthenticationProvider authProvider;
+    @Autowired
+    private UserAuthenticationProvider authProvider;
 
 
 	/*@Bean
@@ -34,27 +34,27 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		return new BCryptPasswordEncoder();
 	}*/
 
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder(){
-		return new BCryptPasswordEncoder();
-	}
+    @Bean
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
-	
-	@Bean(name = "authenticationManager")
+
+    @Bean(name = "authenticationManager")
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
     }
 
-	@Override
-	  public void configure(WebSecurity web) throws Exception {
-		web.ignoring().antMatchers("----/WebSecurityConfiguration configure(WebSecurity web) ----");
-	    web.ignoring().antMatchers("/webjars/**");
-	    web.ignoring().antMatchers("/static/css/**","/css/**","/fonts/**","/libs/**");
-	  }
-	  
-	  @Override
-	  protected void configure(HttpSecurity http) throws Exception { // @formatter:off
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("----/WebSecurityConfiguration configure(WebSecurity web) ----");
+        web.ignoring().antMatchers("/webjars/**");
+        web.ignoring().antMatchers("/static/css/**", "/css/**", "/fonts/**", "/libs/**");
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception { // @formatter:off
 	      /* Correct start
 	      http.requestMatchers()
 	          .antMatchers(
@@ -70,27 +70,27 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 	          Correct end*/
 
 
-		  http.requestMatchers()
-				  .antMatchers(
-						  "----/WebSecurityConfiguration configure(HttpSecurity http) ----",
-						  "/login", "/oauth/authorize", "/secure/two_factor_authentication","/exit",/* "/resources/**",*/
-						  "/admin/**",
-						  "/h2-console/**")
-				  .and()
+        http.requestMatchers()
+                .antMatchers(
+                        "----/WebSecurityConfiguration configure(HttpSecurity http) ----",
+                        "/login", "/oauth/authorize", "/secure/two_factor_authentication", "/exit",/* "/resources/**",*/
+                        "/admin/**",
+                        "/h2-console/**")
+                .and()
 
-				  .authorizeRequests()
-				  //.antMatchers("/admin/**").access("hasRole('ADMIN')")
-				  //.antMatchers("/admin/**").hasRole("ADMIN")
-				  .antMatchers(HttpMethod.GET, "/principal").access("#oauth2.hasScope('read')")
-				  //.hasAuthority("ROLE_ADMIN") --> it works
-				  .antMatchers("/h2-console/**").permitAll()
+                .authorizeRequests()
+                //.antMatchers("/admin/**").access("hasRole('ADMIN')")
+                //.antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers(HttpMethod.GET, "/principal").access("#oauth2.hasScope('read')")
+                //.hasAuthority("ROLE_ADMIN") --> it works
+                .antMatchers("/h2-console/**").permitAll()
 
-				  .anyRequest()
-				  .authenticated()
-				  .and()
-				  .formLogin().loginPage("/login")
-				  .permitAll()
-		  .and().csrf().disable();
+                .anyRequest()
+                .authenticated()
+                .and()
+                .formLogin().loginPage("/login")
+                .permitAll()
+                .and().csrf().disable();
 
 		  /*http.csrf().disable()
 				  .authorizeRequests()
@@ -101,7 +101,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				  .and()
 				  .formLogin().loginPage("/login").permitAll();*/
 
-	  } // @formatter:on
+    } // @formatter:on
 
 
     @Override
@@ -113,9 +113,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 //                .withUser("demo")
 //                .password("demo")
 //                .roles("USER");
-    	
-    	auth.authenticationProvider(authProvider)
-				.userDetailsService(customDetailsService).passwordEncoder(passwordEncoder())
-		;
+
+        auth.authenticationProvider(authProvider)
+                .userDetailsService(customDetailsService).passwordEncoder(passwordEncoder())
+        ;
     }
 }

@@ -24,7 +24,7 @@ import java.util.Map;
 public class CustomApprovalEndpoint {
 
     @RequestMapping("/oauth/taner_confirm_access")
-    public ModelAndView getAccessConfirmation1( Map<String, Object> model, HttpServletRequest request ) {
+    public ModelAndView getAccessConfirmation1(Map<String, Object> model, HttpServletRequest request) {
 
         AuthorizationRequest authorizationRequest = (AuthorizationRequest) model.get("authorizationRequest");
 
@@ -64,24 +64,24 @@ public class CustomApprovalEndpoint {
 
     }
 
-    private List<ApprovalElement> createScopesNew (Map<String, Object> model, HttpServletRequest request ) {
+    private List<ApprovalElement> createScopesNew(Map<String, Object> model, HttpServletRequest request) {
 
         List<ApprovalElement> approvalElements = new ArrayList<>();
 
         Map<String, String> scopes = (Map<String, String>) (model.containsKey("scopes") ?
                 model.get("scopes") : request.getAttribute("scopes"));
 
-        int i=0;
+        int i = 0;
         for (String scope : scopes.keySet()) {
 
             String approvedChecked = scopes.get(scope);
-            String deniedChecked = "true".equals(approvedChecked) ? "false": "true";
+            String deniedChecked = "true".equals(approvedChecked) ? "false" : "true";
 
             ApprovalElement approvalElement = new ApprovalElement();
             approvalElement.setText(scope);
 
-            RadioElement radioApprove = new RadioElement(scope, "true", approvedChecked, "Approve", "scopeRadio"+(i++));
-            RadioElement radioDeny = new RadioElement(scope, "false", deniedChecked, "Deny", "scopeRadio"+(i++));
+            RadioElement radioApprove = new RadioElement(scope, "true", approvedChecked, "Approve", "scopeRadio" + (i++));
+            RadioElement radioDeny = new RadioElement(scope, "false", deniedChecked, "Deny", "scopeRadio" + (i++));
 
             approvalElement.setRadioElements(new ArrayList<RadioElement>() {{
                 add(radioApprove);

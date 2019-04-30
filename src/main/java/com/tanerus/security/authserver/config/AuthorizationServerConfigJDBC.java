@@ -29,7 +29,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @EnableAuthorizationServer
-@PropertySource({ "classpath:persistence.properties" })
+@PropertySource({"classpath:persistence.properties"})
 public class AuthorizationServerConfigJDBC extends AuthorizationServerConfigurerAdapter {
 
     @Autowired
@@ -43,7 +43,7 @@ public class AuthorizationServerConfigJDBC extends AuthorizationServerConfigurer
 
     @Value("classpath:data.sql")
     private Resource dataScript;
-    
+
     @Autowired
     private ClientDetailsService clientDetailsService;
 
@@ -91,27 +91,27 @@ public class AuthorizationServerConfigJDBC extends AuthorizationServerConfigurer
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
         endpoints
-        	.authenticationManager(authenticationManager)
-        	.requestFactory(customOAuth2RequestFactory());
+                .authenticationManager(authenticationManager)
+                .requestFactory(customOAuth2RequestFactory());
     }
-     
+
     @Bean
-    public DefaultOAuth2RequestFactory customOAuth2RequestFactory(){
-    	return new CustomOAuth2RequestFactory(clientDetailsService);
+    public DefaultOAuth2RequestFactory customOAuth2RequestFactory() {
+        return new CustomOAuth2RequestFactory(clientDetailsService);
     }
-    
+
     @Bean
-    public FilterRegistrationBean twoFactorAuthenticationFilterRegistration(){
-    	FilterRegistrationBean registration = new FilterRegistrationBean();
-    	registration.setFilter(twoFactorAuthenticationFilter());
-    	registration.addUrlPatterns("/oauth/authorize");
-    	registration.setName("twoFactorAuthenticationFilter");
-    	return registration;
+    public FilterRegistrationBean twoFactorAuthenticationFilterRegistration() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(twoFactorAuthenticationFilter());
+        registration.addUrlPatterns("/oauth/authorize");
+        registration.setName("twoFactorAuthenticationFilter");
+        return registration;
     }
-    
-	@Bean
-    public TwoFactorAuthenticationFilter twoFactorAuthenticationFilter(){
-    	return new TwoFactorAuthenticationFilter();
+
+    @Bean
+    public TwoFactorAuthenticationFilter twoFactorAuthenticationFilter() {
+        return new TwoFactorAuthenticationFilter();
     }
 
     @PostConstruct

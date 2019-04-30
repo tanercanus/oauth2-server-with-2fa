@@ -11,18 +11,18 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.R
 @Configuration
 public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 
-	@Autowired
-	CustomDetailsService customDetailsService;
+    @Autowired
+    CustomDetailsService customDetailsService;
 
-	@Override
-	public void configure(HttpSecurity http) throws Exception { // @formatter:off
+    @Override
+    public void configure(HttpSecurity http) throws Exception { // @formatter:off
 
 
-		http.authorizeRequests()
-				.antMatchers("/login", "/oauth/authorize", "/secure/two_factor_authentication","/exit", "/resources/**")
-				.permitAll();
+        http.authorizeRequests()
+                .antMatchers("/login", "/oauth/authorize", "/secure/two_factor_authentication", "/exit", "/resources/**")
+                .permitAll();
 
-		//http.authorizeRequests().antMatchers("/resources/**", "/css/**").permitAll().anyRequest().permitAll();
+        //http.authorizeRequests().antMatchers("/resources/**", "/css/**").permitAll().anyRequest().permitAll();
 
 
         /*http.antMatcher("/admin**")
@@ -52,15 +52,15 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 				.and().authorizeRequests()
 				.antMatchers("/principal").access("hasRole('REAL_ADMIN')");*/
 
-		/*http.authorizeRequests().antMatchers("/principal").access("hasRole('REAL_ADMIN')");*/
+        /*http.authorizeRequests().antMatchers("/principal").access("hasRole('REAL_ADMIN')");*/
 
-		//http.authorizeRequests().anyRequest().access("hasRole('ROLE_SYSTEMADMIN')");
+        //http.authorizeRequests().anyRequest().access("hasRole('ROLE_SYSTEMADMIN')");
 
 		/*http.authorizeRequests().antMatchers("/principaltanerrrrr","/principal").access("hasRole('REAL_ADMIN')")
                 .and()
                 .authorizeRequests().anyRequest().access("hasRole('ROLE_SYSTEMADMIN')");*/
 
-		//http.antMatcher("/sss").authorizeRequests().anyRequest().authenticated();
+        //http.antMatcher("/sss").authorizeRequests().anyRequest().authenticated();
 
 
 		/*http.authorizeRequests()
@@ -75,6 +75,6 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 				.authenticated();*/
 
 
-	} // @formatter:on
+    } // @formatter:on
 
 }

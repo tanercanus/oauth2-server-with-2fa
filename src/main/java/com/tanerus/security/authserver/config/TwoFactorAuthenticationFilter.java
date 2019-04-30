@@ -26,11 +26,11 @@ import java.util.Map.Entry;
 
 public class TwoFactorAuthenticationFilter extends OncePerRequestFilter {
 
-	private static final Logger LOG = LoggerFactory.getLogger(TwoFactorAuthenticationFilter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TwoFactorAuthenticationFilter.class);
 
     private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
     private OAuth2RequestFactory oAuth2RequestFactory;
-    
+
     //These next two are added as a test to avoid the compilation errors that happened when they were not defined.
     public static final String ROLE_TWO_FACTOR_AUTHENTICATED = "ROLE_TWO_FACTOR_AUTHENTICATED";
     public static final String ROLE_TWO_FACTOR_AUTHENTICATION_ENABLED = "ROLE_TWO_FACTOR_AUTHENTICATION_ENABLED";
@@ -43,7 +43,7 @@ public class TwoFactorAuthenticationFilter extends OncePerRequestFilter {
 
     private boolean twoFactorAuthenticationEnabled(Collection<? extends GrantedAuthority> authorities) {
         return authorities.stream().anyMatch(
-            authority -> ROLE_TWO_FACTOR_AUTHENTICATION_ENABLED.equals(authority.getAuthority())
+                authority -> ROLE_TWO_FACTOR_AUTHENTICATION_ENABLED.equals(authority.getAuthority())
         );
     }
 
@@ -56,11 +56,11 @@ public class TwoFactorAuthenticationFilter extends OncePerRequestFilter {
     }
 
     @Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
-			throws ServletException, IOException {
-		
-		
-		// Check if the user hasn't done the two factor authentication.
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
+
+        // Check if the user hasn't done the two factor authentication.
         if (isAuthenticated() && !hasAuthority(ROLE_TWO_FACTOR_AUTHENTICATED)) {
             AuthorizationRequest authorizationRequest = oAuth2RequestFactory.createAuthorizationRequest(paramsFromRequest(request));
             /* Check if the client's authorities (authorizationRequest.getAuthorities()) or the user's ones
@@ -73,30 +73,30 @@ public class TwoFactorAuthenticationFilter extends OncePerRequestFilter {
                 request.getSession().setAttribute(CustomOAuth2RequestFactory.SAVED_AUTHORIZATION_REQUEST_SESSION_ATTRIBUTE_NAME, authorizationRequest);
 
                 LOG.debug("doFilterInternal(): redirecting to {}", TwoFactorAuthenticationController.PATH);
-                
+
                 // redirect the the page where the user needs to enter the two factor authentication code
                 redirectStrategy.sendRedirect(request, response,
                         TwoFactorAuthenticationController.PATH
-                           );
+                );
                 return;
-            } 
+            }
         }
 
-		LOG.debug("doFilterInternal(): without redirect.");
-       
-		filterChain.doFilter(request, response);
-	}
-	
-	public boolean isAuthenticated(){
-		return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
-	}
-	
-	private boolean hasAuthority(String checkedAuthority){
-		
-    	return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(
-                authority -> checkedAuthority.equals(authority.getAuthority())
-    			);
+        LOG.debug("doFilterInternal(): without redirect.");
+
+        filterChain.doFilter(request, response);
     }
-	
+
+    public boolean isAuthenticated() {
+        return SecurityContextHolder.getContext().getAuthentication().isAuthenticated();
+    }
+
+    private boolean hasAuthority(String checkedAuthority) {
+
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().anyMatch(
+                authority -> checkedAuthority.equals(authority.getAuthority())
+        );
+    }
+
 }
 

@@ -32,9 +32,9 @@ public class UserAuthenticationProvider extends AbstractUserDetailsAuthenticatio
     protected void additionalAuthenticationChecks(UserDetails userDetails,
                                                   UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) throws AuthenticationException {
 
-        if(usernamePasswordAuthenticationToken.getCredentials() == null || userDetails.getPassword() == null) {
+        if (usernamePasswordAuthenticationToken.getCredentials() == null || userDetails.getPassword() == null) {
             throw new BadCredentialsException("Credentials may not be null.");
-        } else if(!passwordEncoder.matches((String) usernamePasswordAuthenticationToken.getCredentials(), userDetails.getPassword())) {
+        } else if (!passwordEncoder.matches((String) usernamePasswordAuthenticationToken.getCredentials(), userDetails.getPassword())) {
             throw new BadCredentialsException("Invalid Credentials");
         }
     }
@@ -52,15 +52,12 @@ public class UserAuthenticationProvider extends AbstractUserDetailsAuthenticatio
                         "UserDetailsService returned null, which is an interface contract violation");
             }
             return loadedUser;
-        }
-        catch (UsernameNotFoundException ex) {
+        } catch (UsernameNotFoundException ex) {
             mitigateAgainstTimingAttack(authentication);
             throw ex;
-        }
-        catch (InternalAuthenticationServiceException ex) {
+        } catch (InternalAuthenticationServiceException ex) {
             throw ex;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new InternalAuthenticationServiceException(ex.getMessage(), ex);
         }
     }

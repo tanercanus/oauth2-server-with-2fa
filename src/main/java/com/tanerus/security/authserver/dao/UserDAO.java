@@ -15,36 +15,36 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class UserDAO {
 
-	@Autowired
-	JdbcTemplate jdbcTemplate;
+    @Autowired
+    JdbcTemplate jdbcTemplate;
 
-	public UserModel getUserDetails(String username) {
+    public UserModel getUserDetails(String username) {
 
-		Collection<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
-		String sqlQuery = "SELECT * FROM USERS WHERE USERNAME=?";
-		List<UserModel> list = jdbcTemplate.query(sqlQuery, new String[] { username }, (ResultSet rs, int rowNum) -> {
-			UserModel userModel = new UserModel();
-			userModel.setUsername(username);
-			userModel.setPassword(rs.getString("PASSWORD"));
-			return userModel;
-		});
+        Collection<GrantedAuthority> grantedAuthoritiesList = new ArrayList<>();
+        String sqlQuery = "SELECT * FROM USERS WHERE USERNAME=?";
+        List<UserModel> list = jdbcTemplate.query(sqlQuery, new String[]{username}, (ResultSet rs, int rowNum) -> {
+            UserModel userModel = new UserModel();
+            userModel.setUsername(username);
+            userModel.setPassword(rs.getString("PASSWORD"));
+            return userModel;
+        });
 
-		if (list != null && list.size() > 0) {
-			GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_SYSTEMADMIN");
+        if (list != null && list.size() > 0) {
+            GrantedAuthority grantedAuthority = new SimpleGrantedAuthority("ROLE_SYSTEMADMIN");
 
-			grantedAuthoritiesList.add(grantedAuthority);
-			if ( list.get(0).getUsername().equals("user-taner") ) {
-				grantedAuthoritiesList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
-			}
+            grantedAuthoritiesList.add(grantedAuthority);
+            if (list.get(0).getUsername().equals("user-taner")) {
+                grantedAuthoritiesList.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+            }
 
-			list.get(0).setGrantedAuthoritiesList(grantedAuthoritiesList);
-			return list.get(0);
-		}
+            list.get(0).setGrantedAuthoritiesList(grantedAuthoritiesList);
+            return list.get(0);
+        }
 
-		return null;
-	}
-	
-	public void saveUserDetails(UserModel userModel) {
-	
-	}
+        return null;
+    }
+
+    public void saveUserDetails(UserModel userModel) {
+
+    }
 }
