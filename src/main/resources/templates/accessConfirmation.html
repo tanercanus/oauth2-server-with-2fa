@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Auth Server - Login Access Confirmation </title>
+        <div th:replace="fragments/header :: header-css"/>
+    </head>
+    <body>
+
+    <div th:replace="fragments/header :: header"/>
+
+    <div class="container">
+
+        <h1>OAuth Approval - DHB</h1>
+        <p>Do you authorize "<span th:text="${clientId}"></span>" to access your protected resources?</p>
+
+        <form th:id="confirmationForm" th:name="confirmationForm"
+              action="#" th:action="@{/oauth/authorize}" th:object="${accessConfirmationBean}" th:method="post">
+
+            <input type="hidden" id="user_oauth_approval" name="user_oauth_approval" th:value="${accessConfirmationBean.getUserOauthApproval()}" />
+
+            <!--<input th:if="${accessConfirmationBean.getCsrfInput() != null}"
+                   th:type="${accessConfirmationBean.getCsrfInput().getType()}"
+                   th:name="${accessConfirmationBean.getCsrfInput().getName()}"
+                   th:id="${accessConfirmationBean.getCsrfInput().getName()}"
+                   th:value="${accessConfirmationBean.getCsrfInput().getValue()}" />-->
+
+            <ul>
+                <li th:each="approvalLi: ${accessConfirmationBean.getApprovalElements()}">
+                    <div class="form-group"> <span th:text="${approvalLi.getText()}"></span>
+
+                        <th:block th:each="radioElem: ${approvalLi.getRadioElements()}">
+                            <input
+                                    th:type="${radioElem.getType()}"
+                                    th:name="${radioElem.getName()}"
+                                    th:value="${radioElem.getValue()}"
+                                    th:id="${radioElem.getId()}"
+                                    th:checked="${radioElem.getChecked() == 'true'}" />
+                            <label th:for="${radioElem.getId()}" th:text="${radioElem.getText()}" />
+                        </th:block>
+
+                    </div>
+                </li>
+            </ul>
+
+            <label><input name="authorize" value="Authorize" type="submit"/></label>
+
+        </form>
+
+        <form th:if="${hasScope == false}" th:id="denialForm" th:name="denialForm" th:action="@{/oauth/authorize}" th:method="post">
+            <input name="user_oauth_approval" value="false" type="hidden">
+            <label><input name="deny" value="Deny" type="submit"></label>
+        </form>
+
+    </div>
+
+    <div th:replace="fragments/footer :: footer"/>
+
+    </body>
+</html>
